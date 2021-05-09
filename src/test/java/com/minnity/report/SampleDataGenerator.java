@@ -20,7 +20,7 @@ public class SampleDataGenerator {
         .build();
   }
 
-  public static RequestLog aRequestLog() {
+  public static RequestLog.RequestLogBuilder aRequestLogBuilder() {
     return RequestLog.RequestLogBuilder
         .aRequestLog()
         .withCompanyId(nextInt(4, 8))
@@ -30,8 +30,11 @@ public class SampleDataGenerator {
         .withRequestStatus(getRandomElement(SAMPLE_RESPONSE_CODES))
         .withRequestPath(getRandomElement(SAMPLE_API_ENDPOINTS))
         .withRequestMethod(getRandomElement(SAMPLE_REQUEST_METHOD))
-        .withGeoLocation(aGeoLocation())
-        .build();
+        .withGeoLocation(aGeoLocation());
+  }
+
+  public static RequestLog aRequestLog() {
+    return aRequestLogBuilder().build();
   }
 
   private static <T> T getRandomElement(Set<T>  data) {
