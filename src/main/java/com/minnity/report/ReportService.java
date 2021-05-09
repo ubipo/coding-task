@@ -20,7 +20,7 @@ public class ReportService {
   `Integer` represents a company id, but what does RequestLog represent?
   The first log with an error? The last log? Is there only one log with an error per company?
 
-  I added a different version of this method below (and postfixed this one with old). */
+  I added a different version of this method below (and postfixed this one with "Old"). */
   public Map<Integer, RequestLog> findRequestsWithErrorOld(List<RequestLog> requestLogs) {
     throw new NotImplementedException("TODO implement this method");
   }
@@ -43,8 +43,8 @@ public class ReportService {
   private Map<String, Double> findRequestPathAverageDurationTime(List<RequestLog> requestLogs) {
     return requestLogs.stream()
       .collect(Collectors.groupingBy(
-              RequestLog::getRequestPath,
-              Collectors.averagingLong(RequestLog::getRequestDuration)
+        RequestLog::getRequestPath,
+        Collectors.averagingLong(RequestLog::getRequestDuration)
       ));
   }
 }

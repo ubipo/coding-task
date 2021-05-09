@@ -14,12 +14,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ReportServiceTest {
   private static final int NBRO_SAMPLE_REQUESTS = 15;
+  private static final int COMPANY1_ID = 1;
   private ReportService reportService;
-
-  @Test
-  public void todo() {
-    RequestLog sampleRequest = SampleDataGenerator.aRequestLog();
-  }
 
   @Before
   public void beforeEach() {
@@ -28,38 +24,38 @@ public class ReportServiceTest {
 
   @Test
   public void calculateNumberOfRequestsPerCompany() {
-    var nbroRequestCompany1 = 10L;
+    var nbroRequestCompany1 = Long.valueOf(10);
     var requests = Stream.generate(
       () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(nextInt(2, 10)).build()
     ).limit(NBRO_SAMPLE_REQUESTS).collect(Collectors.toList());
     var requestsCompany1 = Stream.generate(
-      () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(1).build()
+      () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(COMPANY1_ID).build()
     ).limit(nbroRequestCompany1).collect(Collectors.toList());
     requests.addAll(requestsCompany1);
 
     var numberOfRequestsPerCompany = reportService.calculateNumberOfRequestsPerCompany(requests);
-    var actualNbroRequestCompany1 = numberOfRequestsPerCompany.get(1);
-    assertEquals(nbroRequestCompany1, actualNbroRequestCompany1.longValue());
+    var actualNbroRequestCompany1 = numberOfRequestsPerCompany.get(COMPANY1_ID);
+    assertEquals(nbroRequestCompany1, actualNbroRequestCompany1);
   }
 
   @Test
   public void findRequestsWithError() {
-    var nbroRequestWithError = 10L;
+    var nbroRequestWithError = Long.valueOf(10);
     var requests = Stream.generate(
-            () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(nextInt(2, 10)).build()
+      () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(nextInt(2, 10)).build()
     ).limit(NBRO_SAMPLE_REQUESTS).collect(Collectors.toList());
     var company1RequestsWithoutError = Stream.generate(
-            () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(1).withRequestStatus(200).build()
+      () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(COMPANY1_ID).withRequestStatus(200).build()
     ).limit(NBRO_SAMPLE_REQUESTS).collect(Collectors.toList());
     var company1RequestsWithError = Stream.generate(
-            () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(1).withRequestStatus(500).build()
+      () -> SampleDataGenerator.aRequestLogBuilder().withCompanyId(COMPANY1_ID).withRequestStatus(500).build()
     ).limit(nbroRequestWithError).collect(Collectors.toList());
     requests.addAll(company1RequestsWithoutError);
     requests.addAll(company1RequestsWithError);
 
     var numberOfErrorsPerCompany = reportService.findRequestsWithError(requests);
-    var actualNbroRequestWithError = numberOfErrorsPerCompany.get(1);
-    assertEquals(nbroRequestWithError, actualNbroRequestWithError.longValue());
+    var actualNbroRequestWithError = numberOfErrorsPerCompany.get(COMPANY1_ID);
+    assertEquals(nbroRequestWithError, actualNbroRequestWithError);
   }
 
   @Test
@@ -69,7 +65,7 @@ public class ReportServiceTest {
       () -> SampleDataGenerator.aRequestLogBuilder().withRequestPath("/a").withRequestDuration(10).build()
     ).limit(NBRO_SAMPLE_REQUESTS).collect(Collectors.toList());
     var longDurationRequests = Stream.generate(
-            () -> SampleDataGenerator.aRequestLogBuilder().withRequestPath(longPath).withRequestDuration(40).build()
+      () -> SampleDataGenerator.aRequestLogBuilder().withRequestPath(longPath).withRequestDuration(20).build()
     ).limit(NBRO_SAMPLE_REQUESTS).collect(Collectors.toList());
     requests.addAll(longDurationRequests);
 
